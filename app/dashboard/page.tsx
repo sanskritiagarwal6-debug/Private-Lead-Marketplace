@@ -48,6 +48,17 @@ function DashboardContent() {
                 query = query.ilike('title', `%${qParam}%`);
             }
 
+            const mileageParam = searchParams.get('mileage');
+            if (mileageParam) {
+                query = query.lte('mileage', parseInt(mileageParam));
+            }
+
+            const yearParam = searchParams.get('year');
+            if (yearParam) {
+                // Filter for cars registered on or after Jan 1st of the selected year
+                query = query.gte('registration_date', `${yearParam}-01-01`);
+            }
+
             const { data } = await query;
 
             if (data) {
