@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Filters from "@/components/Filters";
 import LeadCard from "@/components/LeadCard";
@@ -11,7 +11,7 @@ import { formatCurrency } from "@/lib/utils";
 
 import DashboardHero from "@/components/DashboardHero";
 
-export default function Dashboard() {
+function DashboardContent() {
     const searchParams = useSearchParams();
     const [leads, setLeads] = useState<any[]>([]);
     const [stats, setStats] = useState({ count: 0, totalValue: 0 });
@@ -170,5 +170,13 @@ export default function Dashboard() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function Dashboard() {
+    return (
+        <Suspense fallback={<div className="min-h-screen pt-24 pb-10 px-4 flex items-center justify-center text-muted-foreground">Loading dashboard...</div>}>
+            <DashboardContent />
+        </Suspense>
     );
 }
