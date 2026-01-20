@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Filter, X } from "lucide-react";
+import { Search, Filter, X, ChevronDown } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
     Select,
@@ -133,15 +133,20 @@ export default function Filters() {
         setTimeout(() => setIsCleared(false), 100);
     };
 
+    const [isExpanded, setIsExpanded] = useState(false);
     const hasActiveFilters = Object.keys(filterValues).length > 0;
 
     return (
         <div className="w-full lg:w-64 flex-shrink-0 space-y-6">
             <div className="glass p-6 rounded-xl space-y-6">
                 <div className="flex items-center justify-between text-primary font-semibold">
-                    <div className="flex items-center gap-2">
+                    <div
+                        className="flex items-center gap-2 cursor-pointer lg:cursor-default"
+                        onClick={() => setIsExpanded(!isExpanded)}
+                    >
                         <Filter className="w-4 h-4" />
                         <span>Filters</span>
+                        <ChevronDown className={`w-4 h-4 lg:hidden transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                     </div>
                     {hasActiveFilters && (
                         <button onClick={clearFilters} className="text-xs text-muted-foreground hover:text-white flex items-center gap-1">
@@ -150,7 +155,7 @@ export default function Filters() {
                     )}
                 </div>
 
-                <div className="space-y-6">
+                <div className={`space-y-6 ${isExpanded ? 'block' : 'hidden lg:block'}`}>
                     {filterConfig.map((filter) => (
                         <div key={filter.id} className="space-y-3">
                             <label className="text-xs uppercase text-muted-foreground font-medium tracking-wider">
