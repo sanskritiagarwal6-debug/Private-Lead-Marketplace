@@ -81,50 +81,56 @@ export default function DashboardHero() {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="flex flex-col sm:flex-row gap-6 relative"
+                        className="flex flex-col sm:flex-row gap-6 w-full md:w-auto"
                     >
                         {features.map((feature) => (
-                            <div
+                            <button
                                 key={feature.id}
-                                className="relative group"
-                                onMouseEnter={() => setSelectedFeature(feature)}
-                                onMouseLeave={() => setSelectedFeature(null)}
+                                onClick={() => setSelectedFeature(feature)}
+                                className="group flex-1 flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors text-left min-w-[200px]"
                             >
-                                <div
-                                    className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors text-left cursor-default"
-                                >
-                                    <div className={`w-10 h-10 rounded-full ${feature.bg} flex items-center justify-center ${feature.color}`}>
-                                        <feature.icon className="w-5 h-5" />
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="font-bold text-sm text-white">{feature.title.split(' ')[0]}</span>
-                                        <span className="text-xs text-muted-foreground">{feature.title.split(' ').slice(1).join(' ')}</span>
-                                    </div>
+                                <div className={`w-10 h-10 rounded-full ${feature.bg} flex items-center justify-center ${feature.color} flex-shrink-0`}>
+                                    <feature.icon className="w-5 h-5" />
                                 </div>
-
-                                <AnimatePresence>
-                                    {selectedFeature?.id === feature.id && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                            className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 glass p-4 rounded-xl border border-white/10 z-50 shadow-xl"
-                                        >
-                                            {/* Arrow */}
-                                            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 border-l border-t border-white/10 bg-black/80 backdrop-blur-xl" />
-
-                                            <h4 className="font-bold text-sm text-white mb-1 relative z-10">{feature.title}</h4>
-                                            <p className="text-xs text-muted-foreground relative z-10 leading-relaxed">
-                                                {feature.desc}
-                                            </p>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
+                                <div className="flex flex-col">
+                                    <span className="font-bold text-sm text-white">{feature.title.split(' ')[0]}</span>
+                                    <span className="text-xs text-muted-foreground">{feature.title.split(' ').slice(1).join(' ')}</span>
+                                </div>
+                            </button>
                         ))}
                     </motion.div>
                 </div>
             </div>
+
+            {/* Feature Modal */}
+            <AnimatePresence>
+                {selectedFeature && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            onClick={() => setSelectedFeature(null)}
+                            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 pointer-events-auto"
+                        />
+                        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none p-4">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                className="glass p-8 rounded-2xl max-w-md w-full pointer-events-auto relative border border-white/10"
+                            >
+                                <button onClick={() => setSelectedFeature(null)} className="absolute top-4 right-4 text-muted-foreground hover:text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                                <div className={`w-16 h-16 rounded-full ${selectedFeature.bg} flex items-center justify-center mb-6 mx-auto`}>
+                                    <selectedFeature.icon className={`w-8 h-8 ${selectedFeature.color}`} />
+                                </div>
+                                <h3 className="text-xl font-bold text-center mb-2">{selectedFeature.title}</h3>
+                                <p className="text-muted-foreground text-center leading-relaxed">
+                                    {selectedFeature.desc}
+                                </p>
+                            </motion.div>
+                        </div>
+                    </>
+                )}
+            </AnimatePresence>
         </>
     );
 }
