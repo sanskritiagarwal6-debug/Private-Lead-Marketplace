@@ -1,0 +1,12 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/checkout/[id]/page": "app/checkout/[id]/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/deals/page": "app/deals/page.js",
+  "/hubs/[city]/page": "app/hubs/[city]/page.js",
+  "/insights/page": "app/insights/page.js",
+  "/leads/[id]/page": "app/leads/[id]/page.js",
+  "/page": "app/page.js",
+  "/purchases/page": "app/purchases/page.js",
+  "/support/page": "app/support/page.js"
+}

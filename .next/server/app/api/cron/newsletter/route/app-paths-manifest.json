@@ -1,0 +1,3 @@
+{
+  "/api/cron/newsletter/route": "app/api/cron/newsletter/route.js"
+}
