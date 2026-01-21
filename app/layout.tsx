@@ -19,6 +19,8 @@ export const metadata: Metadata = {
 
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import CopyProtection from "@/components/CopyProtection";
+import AuthGuard from "@/components/AuthGuard";
 
 export default function RootLayout({
   children,
@@ -30,13 +32,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Sidebar />
-        <div className="lg:pl-64 min-h-screen flex flex-col">
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <CopyProtection />
+        <AuthGuard>
+          <Sidebar />
+          <div className="lg:pl-64 min-h-screen flex flex-col">
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </AuthGuard>
       </body>
     </html>
   );

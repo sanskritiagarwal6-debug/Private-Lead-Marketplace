@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboard, PlusCircle, ShoppingBag, MessageSquare } from "lucide-react";
+import { LayoutDashboard, PlusCircle, ShoppingBag, MessageSquare, UserPlus } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +16,7 @@ export default function AdminLayout({
         { href: "/admin", label: "Overview", icon: LayoutDashboard },
         { href: "/admin/leads/new", label: "Add Lead", icon: PlusCircle },
         { href: "/admin/offers", label: "Offers", icon: MessageSquare },
+        { href: "/admin/access-requests", label: "Access Requests", icon: UserPlus },
     ];
 
     return (

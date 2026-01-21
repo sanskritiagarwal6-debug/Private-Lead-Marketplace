@@ -7,17 +7,64 @@ import { motion } from "framer-motion";
 
 import { useRouter } from "next/navigation";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isRequestMode, setIsRequestMode] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Temporary bypass for testing
-    console.log("Login bypass with:", email);
+
+    // Check if user is authorized
+    // Note: Ideally this happens AFTER Supabase Auth/Magic Link, but for prototype we check email directly
+    const { data: authorizedUser } = await supabase
+      .from('authorized_users')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    // If we have authorized users, enforce the check. 
+    // If the table is empty (initial setup), maybe let them in? Or use a hardcoded fallback.
+    // For now, if no authorized user found, we BLOCK login (simulated).
+
+    // TODO: Enforce this strictly once the first admin is added.
+    // if (!authorizedUser) {
+    //     alert("Access Denied. Your email is not whitelisted.");
+    //     setIsLoading(false);
+    //     return;
+    // }
+
+    // Temporary bypass for testing until admin adds emails
+    console.log("Login with:", email);
     router.push("/dashboard");
+  };
+
+  const handleRequestAccess = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const { error } = await supabase
+      .from('access_requests')
+      .insert([{ email, status: 'pending' }]);
+
+    setIsLoading(false);
+
+    if (error) {
+      alert("Error submitting request. Please try again.");
+    } else {
+      alert("Request submitted! An admin will review your access request.");
+      setEmail("");
+      setIsRequestMode(false);
+    }
   };
 
   return (
@@ -34,13 +81,18 @@ export default function LoginPage() {
       >
         <div className="glass p-8 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2 tracking-tight">Welcome Back</h1>
+            <h1 className="text-3xl font-bold mb-2 tracking-tight">
+              {isRequestMode ? "Request Access" : "Welcome Back"}
+            </h1>
             <p className="text-muted-foreground text-sm">
-              Login to access the private marketplace
+              {isRequestMode
+                ? "Enter your email to join the private marketplace"
+                : "Login to access the private marketplace"
+              }
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={isRequestMode ? handleRequestAccess : handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Input
                 type="email"
@@ -58,16 +110,23 @@ export default function LoginPage() {
               variant="gold"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Login"}
+              {isLoading ? "Processing..." : (isRequestMode ? "Submit Request" : "Login")}
             </Button>
 
             <div className="text-center mt-6">
-              <a
-                href="mailto:sanskritiagarwal6@gmail.com?subject=Dealer Access Request"
-                className="text-sm text-neutral-400 hover:text-white transition-colors duration-200"
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRequestMode(!isRequestMode);
+                  setEmail("");
+                }}
+                className="text-sm text-neutral-400 hover:text-white transition-colors duration-200 underline-offset-4 hover:underline"
               >
-                Not a member? Request Invitation
-              </a>
+                {isRequestMode
+                  ? "Already have an account? Login"
+                  : "Not a member? Request Invitation"
+                }
+              </button>
             </div>
           </form>
         </div>
