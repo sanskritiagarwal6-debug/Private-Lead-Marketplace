@@ -40,7 +40,10 @@ export default function CheckoutPage() {
     };
 
     const handleConfirmPurchase = async () => {
-        if (paymentMethod === 'card' && !isCardValid()) return;
+        if (paymentMethod === 'card' && !isCardValid()) {
+            alert("Please complete all card details to proceed.");
+            return;
+        }
 
         setProcessing(true);
 
@@ -225,7 +228,7 @@ export default function CheckoutPage() {
                             className="w-full h-14 text-lg"
                             variant={type === 'exclusive' ? 'gold' : 'default'}
                             onClick={handleConfirmPurchase}
-                            disabled={processing || (paymentMethod === 'card' && !isCardValid())}
+                            disabled={processing}
                         >
                             {processing ? "Processing..." : `Confirm Payment of ${formatCurrency(price)}`}
                         </Button>
