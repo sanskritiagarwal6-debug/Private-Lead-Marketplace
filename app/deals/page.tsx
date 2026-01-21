@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { MessageSquare, Calendar, DollarSign, Clock } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
