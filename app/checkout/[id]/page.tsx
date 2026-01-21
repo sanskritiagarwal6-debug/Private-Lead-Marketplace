@@ -1,11 +1,11 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
-import { Shield, CheckCircle, ArrowRight, Lock } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Shield, CheckCircle, ArrowRight, Lock, CreditCard, Building2 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CheckoutPage() {
     const params = useParams();
@@ -17,6 +17,15 @@ export default function CheckoutPage() {
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
 
+    // Payment State
+    const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank'>('card');
+    const [cardDetails, setCardDetails] = useState({
+        name: '',
+        number: '',
+        expiry: '',
+        cvv: ''
+    });
+
     useEffect(() => {
         const fetchLead = async () => {
             const { data } = await supabase.from('leads').select('*').eq('id', params.id).single();
@@ -26,7 +35,13 @@ export default function CheckoutPage() {
         fetchLead();
     }, [params.id]);
 
+    const isCardValid = () => {
+        return cardDetails.name && cardDetails.number && cardDetails.expiry && cardDetails.cvv;
+    };
+
     const handleConfirmPurchase = async () => {
+        if (paymentMethod === 'card' && !isCardValid()) return;
+
         setProcessing(true);
 
         // Simulate payment processing time
@@ -48,9 +63,8 @@ export default function CheckoutPage() {
 
         // Success
         alert("Purchase Successful! Redirecting to your purchases...");
-        router.push('/purchases');
-        // In real app, create /purchases page query. For now redirecting to dashboard or dummy.
-        // router.push('/dashboard'); 
+        // Redirect to dashboard as Purchases page doesn't exist yet but router.push('/purchases') was in original code
+        router.push('/dashboard');
     };
 
     if (loading) return <div className="p-8 text-center">Loading checkout...</div>;
@@ -59,11 +73,11 @@ export default function CheckoutPage() {
     const price = type === 'exclusive' ? lead.price_exclusive : lead.price_standard;
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="min-h-screen flex items-center justify-center p-6 pt-24">
             <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 {/* Left: Product Summary */}
-                <div className="glass p-8 rounded-2xl border border-white/10">
+                <div className="glass p-8 rounded-2xl border border-white/10 h-fit">
                     <div className="aspect-video w-full bg-neutral-900 rounded-lg overflow-hidden mb-6">
                         <img
                             src={lead.image_url || "/fallback-car.png"}
@@ -114,9 +128,96 @@ export default function CheckoutPage() {
                         <div className="space-y-3">
                             <label className="text-sm font-medium">Payment Method</label>
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="border border-white/20 p-3 rounded flex items-center justify-center cursor-pointer hover:bg-white/5 bg-white/5">Credit Card</div>
-                                <div className="border border-white/10 p-3 rounded flex items-center justify-center cursor-pointer hover:bg-white/5 text-muted-foreground">Bank Wire</div>
+                                <div
+                                    onClick={() => setPaymentMethod('card')}
+                                    className={`border p-3 rounded flex items-center justify-center gap-2 cursor-pointer transition-all ${paymentMethod === 'card' ? 'border-primary bg-primary/10 text-primary' : 'border-white/10 hover:bg-white/5 text-muted-foreground'}`}
+                                >
+                                    <CreditCard className="w-4 h-4" /> Credit Card
+                                </div>
+                                <div
+                                    onClick={() => setPaymentMethod('bank')}
+                                    className={`border p-3 rounded flex items-center justify-center gap-2 cursor-pointer transition-all ${paymentMethod === 'bank' ? 'border-primary bg-primary/10 text-primary' : 'border-white/10 hover:bg-white/5 text-muted-foreground'}`}
+                                >
+                                    <Building2 className="w-4 h-4" /> Bank Wire
+                                </div>
                             </div>
+                        </div>
+
+                        <div className="min-h-[280px]">
+                            <AnimatePresence mode="wait">
+                                {paymentMethod === 'card' ? (
+                                    <motion.div
+                                        key="card"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="space-y-4"
+                                    >
+                                        <div className="space-y-2">
+                                            <label className="text-xs uppercase text-muted-foreground">Cardholder Name</label>
+                                            <Input
+                                                placeholder="John Doe"
+                                                className="focus-visible:ring-primary/50 focus-visible:border-primary"
+                                                value={cardDetails.name}
+                                                onChange={(e) => setCardDetails({ ...cardDetails, name: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs uppercase text-muted-foreground">Card Number</label>
+                                            <Input
+                                                placeholder="0000 0000 0000 0000"
+                                                className="focus-visible:ring-primary/50 focus-visible:border-primary"
+                                                value={cardDetails.number}
+                                                onChange={(e) => setCardDetails({ ...cardDetails, number: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <label className="text-xs uppercase text-muted-foreground">Expiry Date</label>
+                                                <Input
+                                                    placeholder="MM/YY"
+                                                    className="focus-visible:ring-primary/50 focus-visible:border-primary"
+                                                    value={cardDetails.expiry}
+                                                    onChange={(e) => setCardDetails({ ...cardDetails, expiry: e.target.value })}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs uppercase text-muted-foreground">CVV</label>
+                                                <Input
+                                                    placeholder="123"
+                                                    type="password"
+                                                    className="focus-visible:ring-primary/50 focus-visible:border-primary"
+                                                    value={cardDetails.cvv}
+                                                    onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="bank"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="p-6 rounded-xl bg-white/5 border border-white/10 text-center space-y-4"
+                                    >
+                                        <Building2 className="w-12 h-12 text-muted-foreground mx-auto opacity-50" />
+                                        <div>
+                                            <h4 className="font-bold text-white">Bank Transfer Details</h4>
+                                            <p className="text-sm text-muted-foreground mt-2">
+                                                Please transfer the total amount to the following account. Your purchase will be confirmed once funds are received.
+                                            </p>
+                                        </div>
+                                        <div className="text-sm bg-black/40 p-4 rounded font-mono text-left space-y-2">
+                                            <div className="flex justify-between"><span>Bank:</span> <span>HDFC Bank</span></div>
+                                            <div className="flex justify-between"><span>Account:</span> <span>0000 1234 5678</span></div>
+                                            <div className="flex justify-between"><span>IFSC:</span> <span>HDFC0001234</span></div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
                         <Button
@@ -124,7 +225,7 @@ export default function CheckoutPage() {
                             className="w-full h-14 text-lg"
                             variant={type === 'exclusive' ? 'gold' : 'default'}
                             onClick={handleConfirmPurchase}
-                            disabled={processing}
+                            disabled={processing || (paymentMethod === 'card' && !isCardValid())}
                         >
                             {processing ? "Processing..." : `Confirm Payment of ${formatCurrency(price)}`}
                         </Button>
