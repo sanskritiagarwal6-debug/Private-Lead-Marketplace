@@ -161,6 +161,7 @@ export default function LeadCard({ lead }: { lead: Lead }) {
                 onClose={() => setIsOfferOpen(false)}
                 leadTitle={lead.title}
                 leadId={lead.id}
+                leadImage={lead.image_url}
             />
         </>
     );

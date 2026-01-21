@@ -6,12 +6,17 @@ import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Share2, Shield, Calendar, Gauge, Award, CheckCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import OfferModal from "@/components/OfferModal";
 
 export default function LeadDetailsPage() {
     const params = useParams();
     const router = useRouter();
     const [lead, setLead] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+
+    // Offer Modal State
+    const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+
     const FALLBACK_IMAGE = "/fallback-car.png";
 
     useEffect(() => {
@@ -72,7 +77,10 @@ export default function LeadDetailsPage() {
                             </div>
                             <div className="flex gap-2">
                                 <Button onClick={() => router.push(`/checkout/${lead.id}?type=standard`)} className="flex-1" variant="outline">Buy Standard</Button>
-                                <Button variant="ghost" size="icon"><Share2 className="w-4 h-4" /></Button>
+                                <Button onClick={() => setIsOfferModalOpen(true)} className="flex-1 bg-white/10 hover:bg-white/20 text-white border-white/10">Make Offer</Button>
+                            </div>
+                            <div className="flex justify-end">
+                                <Button variant="ghost" size="sm" className="text-muted-foreground"><Share2 className="w-4 h-4 mr-2" /> Share</Button>
                             </div>
                         </div>
                     </div>
@@ -122,6 +130,14 @@ export default function LeadDetailsPage() {
 
                 </div>
             </div>
+
+            <OfferModal
+                isOpen={isOfferModalOpen}
+                onClose={() => setIsOfferModalOpen(false)}
+                leadTitle={lead.title}
+                leadId={lead.id}
+                leadImage={lead.image_url}
+            />
         </div>
     );
 }

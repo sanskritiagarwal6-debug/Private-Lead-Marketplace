@@ -11,9 +11,10 @@ interface OfferModalProps {
     onClose: () => void;
     leadTitle: string;
     leadId: string;
+    leadImage?: string;
 }
 
-export default function OfferModal({ isOpen, onClose, leadTitle, leadId }: OfferModalProps) {
+export default function OfferModal({ isOpen, onClose, leadTitle, leadId, leadImage }: OfferModalProps) {
     const [amount, setAmount] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -21,15 +22,25 @@ export default function OfferModal({ isOpen, onClose, leadTitle, leadId }: Offer
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call
-        console.log(`Submitting offer of ${amount} for ${leadId}`);
-
         await new Promise(resolve => setTimeout(resolve, 1000));
 
+        const newOffer = {
+            id: crypto.randomUUID(),
+            lead_id: leadId,
+            lead_title: leadTitle,
+            lead_image: leadImage || "/fallback-car.png",
+            offer_amount: parseFloat(amount),
+            date: new Date().toISOString(),
+            status: 'pending'
+        };
+
+        const existingOffers = JSON.parse(localStorage.getItem('my_offers') || '[]');
+        localStorage.setItem('my_offers', JSON.stringify([newOffer, ...existingOffers]));
+
+        alert("Offer Submitted Successfully!");
         setIsSubmitting(false);
         onClose();
         setAmount("");
-        // Show success toast here (removed for brevity)
     };
 
     return (
