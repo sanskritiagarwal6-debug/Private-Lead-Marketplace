@@ -117,9 +117,9 @@ export default function Footer() {
                 <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
                     <p>© 2026 LuxeMarket India Pvt Ltd. All rights reserved.</p>
                     <div className="flex gap-6">
-                        <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-                        <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
-                        <Link href="#" className="hover:text-white transition-colors">Dealer Verification</Link>
+                        <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+                        <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
+                        <Link href="/verification" className="hover:text-primary transition-colors">Dealer Verification</Link>
                     </div>
                 </div>
             </div>
