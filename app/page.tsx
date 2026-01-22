@@ -38,6 +38,7 @@ export default function LoginPage() {
 
     // Temporary bypass for testing until admin adds emails
     console.log("Login with:", email);
+    localStorage.setItem('user_email', email);
     router.push("/dashboard");
   };
 
