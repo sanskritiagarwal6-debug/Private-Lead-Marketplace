@@ -20,7 +20,32 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [],
+  "dynamicRoutes": [
+    {
+      "page": "/checkout/[id]",
+      "regex": "^/checkout/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/checkout/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/hubs/[city]",
+      "regex": "^/hubs/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPcity": "nxtPcity"
+      },
+      "namedRegex": "^/hubs/(?<nxtPcity>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/leads/[id]",
+      "regex": "^/leads/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/leads/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
   "staticRoutes": [
     {
       "page": "/",
@@ -47,10 +72,34 @@
       "namedRegex": "^/admin(?:/)?$"
     },
     {
+      "page": "/admin/access-requests",
+      "regex": "^/admin/access\\-requests(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/access\\-requests(?:/)?$"
+    },
+    {
       "page": "/admin/leads/new",
       "regex": "^/admin/leads/new(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/leads/new(?:/)?$"
+    },
+    {
+      "page": "/admin/listings",
+      "regex": "^/admin/listings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/listings(?:/)?$"
+    },
+    {
+      "page": "/admin/offers",
+      "regex": "^/admin/offers(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/offers(?:/)?$"
+    },
+    {
+      "page": "/admin/users",
+      "regex": "^/admin/users(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/users(?:/)?$"
     },
     {
       "page": "/api/cron/newsletter",
@@ -65,10 +114,58 @@
       "namedRegex": "^/dashboard(?:/)?$"
     },
     {
+      "page": "/dashboard/sell",
+      "regex": "^/dashboard/sell(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/sell(?:/)?$"
+    },
+    {
+      "page": "/deals",
+      "regex": "^/deals(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/deals(?:/)?$"
+    },
+    {
       "page": "/favicon.ico",
       "regex": "^/favicon\\.ico(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/insights",
+      "regex": "^/insights(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/insights(?:/)?$"
+    },
+    {
+      "page": "/privacy",
+      "regex": "^/privacy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/privacy(?:/)?$"
+    },
+    {
+      "page": "/purchases",
+      "regex": "^/purchases(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/purchases(?:/)?$"
+    },
+    {
+      "page": "/support",
+      "regex": "^/support(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/support(?:/)?$"
+    },
+    {
+      "page": "/terms",
+      "regex": "^/terms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/terms(?:/)?$"
+    },
+    {
+      "page": "/verification",
+      "regex": "^/verification(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/verification(?:/)?$"
     }
   ],
   "dataRoutes": [],

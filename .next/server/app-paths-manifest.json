@@ -1,10 +1,25 @@
 {
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/admin/access-requests/page": "app/admin/access-requests/page.js",
   "/admin/leads/new/page": "app/admin/leads/new/page.js",
+  "/admin/listings/page": "app/admin/listings/page.js",
+  "/admin/offers/page": "app/admin/offers/page.js",
   "/admin/page": "app/admin/page.js",
+  "/admin/users/page": "app/admin/users/page.js",
   "/api/cron/newsletter/route": "app/api/cron/newsletter/route.js",
+  "/checkout/[id]/page": "app/checkout/[id]/page.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/sell/page": "app/dashboard/sell/page.js",
+  "/deals/page": "app/deals/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js"
+  "/hubs/[city]/page": "app/hubs/[city]/page.js",
+  "/insights/page": "app/insights/page.js",
+  "/leads/[id]/page": "app/leads/[id]/page.js",
+  "/page": "app/page.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/purchases/page": "app/purchases/page.js",
+  "/support/page": "app/support/page.js",
+  "/terms/page": "app/terms/page.js",
+  "/verification/page": "app/verification/page.js"
 }

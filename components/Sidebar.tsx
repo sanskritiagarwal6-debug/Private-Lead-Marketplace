@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ShoppingBag, Tag, LogOut, Shield, HelpCircle, X } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, Tag, LogOut, Shield, HelpCircle, X, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
@@ -22,6 +22,7 @@ export default function Sidebar() {
 
     const navItems = [
         { href: "/dashboard", label: "Marketplace", icon: LayoutDashboard },
+        { href: "/dashboard/sell", label: "Sell a Lead", icon: PlusCircle },
         { href: "/deals", label: "My Deals", icon: Tag },
         { href: "/purchases", label: "Purchases", icon: ShoppingBag },
         { href: "/support", label: "Help Center", icon: HelpCircle },
